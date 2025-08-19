@@ -1,7 +1,7 @@
 const cron = require("cron");
 const https = require("https");
 
-const backendUrl = "https://hroverseas-backend.onrender.com";
+const backendUrl = "https://rvr-experts-backend.onrender.com";
 
 const job = new cron.CronJob("*/14 * * * *", function () {
   console.log("Restarting Server");
