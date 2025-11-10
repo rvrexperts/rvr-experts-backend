@@ -14,15 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 job.start();
 
-const transporter = nodeMailer.createTransport({
-  host: "smtp.gmail.com", //  SMTP host (e.g., "smtp.gmail.com" for Gmail)
-  port: 587, //  SMTP port (e.g., 587 for Gmail)
-  secure: false,
-  auth: {
-    user: process.env.ADMIN_MAIL,
-    pass: process.env.ADMIN_MAIL_PASSKEY,
-  },
-});
+
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //Dummy Url for Cron Jobs
 
@@ -70,8 +64,8 @@ app.post("/contact-form", async (req, res) => {
       html: receiverContactContent,
     };
 
-    await transporter.sendMail(adminMsg);
-    await transporter.sendMail(userMsg);
+    await sgMail.send(adminMsg);
+    await sgMail.send(userMsg);
     res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Failed to send email:", error);
